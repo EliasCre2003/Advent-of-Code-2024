@@ -15,17 +15,15 @@ def parse_mull(string: str) -> tuple[int, int]:
     string = string.split(",")
     return int(string[0]), int(string[1])
 
-def part1(lines: list[str]) -> str:
-    string = ''.join(line.strip() for line in lines)
-    mulls = [parse_mull(mull) for mull in get_all_mull(string)]
+def part1(input: str) -> str:
+    mulls = [parse_mull(mull) for mull in get_all_mull(input)]
     return sum(mull[0] * mull[1] for mull in mulls)
 
-def part2(lines: list[str]) -> str:
-    string = ''.join(line.strip() for line in lines)
+def part2(input: str) -> str:
     mull = True
     total = 0
-    while string:
-        term, string = remove_first_occurence(string, r"mul\(\d+,\d+\)|do\(\)|don't\(\)")
+    while input:
+        term, input = remove_first_occurence(input, r"mul\(\d+,\d+\)|do\(\)|don't\(\)")
         if not term: break
         if term == "do()": mull = True
         elif term == "don't()": mull = False
@@ -36,7 +34,7 @@ def part2(lines: list[str]) -> str:
 
 def main():
     with open("3. Mull It Over/input.txt", 'r') as f:
-        lines = f.readlines()
+        lines = f.read()
 
     for i, part in enumerate([part1, part2]):
         print(f"Part {i+1}: {part(lines)}")
