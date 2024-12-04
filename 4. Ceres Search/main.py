@@ -22,6 +22,7 @@ class LetterField:
         self.letters = deepcopy(letters)
     
     def get_at(self, coord: tuple[int, int]) -> str:
+        if not (0 <= coord[0] and 0 <= coord[1]): return '.' 
         try:
             return self.letters[coord[1]][coord[0]]
         except IndexError:
@@ -36,6 +37,8 @@ class LetterField:
     def scan(self, finder_function: Callable[['LetterField', tuple[int, int]], int]) -> int:
         occurenses = 0
         for y, line in enumerate(self.letters):
+            if y >= 6:
+                pass
             for x in range(len(line)):
                 occurenses += finder_function(self, (x, y))
         return occurenses
@@ -51,10 +54,10 @@ def part1(field: LetterField, origin: tuple[int, int]) -> int:
     except KeyError:
         return 0
     patterns = [
-        FieldPattern([(0,  1), (0, -2), (0,  3)]),
-        FieldPattern([(1,  0), (2, -0), (3,  0)]),
-        FieldPattern([(1,  1), (2, -2), (3,  3)]),
-        FieldPattern([(1, -1), (2, -2), (3, -3)])
+        FieldPattern([( 1, 0), ( 2, 0), ( 3, 0)]),
+        FieldPattern([( 0, 1), ( 0, 2), ( 0, 3)]),
+        FieldPattern([( 1, 1), ( 2, 2), ( 3, 3)]),
+        FieldPattern([(-1, 1), (-2, 2), (-3, 3)])
     ]
     return sum(
         field.get_sequence(origin, pattern).match(correct_sequence)
