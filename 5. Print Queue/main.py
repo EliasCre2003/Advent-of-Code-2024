@@ -12,9 +12,6 @@ class OrderingMap:
     
     def __contains__(self, num: int) -> bool:
         return num in self.vals
-    
-    def get(self, key_val: int) -> set[int]:
-        return self.vals[key_val] if key_val in self.vals else set()
 
     def __getitem__(self, key: int) -> set[int]:
         return self.vals[key] if key in self.vals else set()
@@ -42,7 +39,7 @@ class NumSequence:
         for num in self.vals:
             if (not occured or
                 num not in ordering or
-                not occured.intersection(ordering.get(num))
+                not occured.intersection(ordering[num])
                 ): occured.add(num)
             else: return False
         return True
@@ -59,7 +56,6 @@ class NumSequence:
         self.dfs_cache[key] = afters
         return afters
     
-
     def correct_order(self, ordering: OrderingMap) -> None:
         self.dfs_cache = {}
         lengths = {k: len(self.get_all_required_after(ordering, k)) for k in self.vals}
@@ -89,19 +85,6 @@ def part1(ordering: OrderingMap, sequences: list[NumSequence]) -> int:
             total += sequence[len(sequence) // 2]
     return total
 
-
-def dfs(ordering: dict[int: set[int]], key: int, update: list[int], cache: dict[(int, list[int]), set[int]] ={}) -> set[int]:
-    if (key, tuple(update)) in cache:
-        return cache[(key, tuple(update))]
-    if key not in ordering:
-        return set()
-    afters: set[int] = ordering[key]
-    for k in afters:
-        if k not in update: continue
-        afters = afters.union(dfs(ordering, k, update))
-    cache[(key, tuple(update))] = afters
-    return afters
-
 def part2(ordering: OrderingMap, sequences: list[NumSequence]) -> int:
     total = 0
     for sequence in sequences:
@@ -111,20 +94,16 @@ def part2(ordering: OrderingMap, sequences: list[NumSequence]) -> int:
     return total
 
 
-
 def main():
     with open("5. Print Queue/input.txt", 'r') as f:
         lines = f.readlines()
-    
-    sections = []
-    for i, line in enumerate(lines):
-        if line == '\n':
-            sections.append(lines[:i])
-            sections.append(lines[i+1:])
-    sections = (parse_map(sections[0]), parse_sequences(sections[1]))
-    ordering = OrderingMap(sections[0])
-    sequences = [NumSequence(sequence) for sequence in sections[1]]
 
+    for i, line in enumerate(lines):
+        if line != '\n': continue
+        ordering = OrderingMap(parse_map(lines[:i]))
+        sequences = [NumSequence(sequence) 
+                        for sequence in parse_sequences(lines[i+1:])]
+    
     for i, part in enumerate([part1, part2]):
         print(f"Part {i+1}: {part(ordering, sequences)}")
 
