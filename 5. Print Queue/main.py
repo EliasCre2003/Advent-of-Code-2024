@@ -37,20 +37,30 @@ def part1(ordering: dict[int: set[int]], updates: list[list[int]]) -> int:
     return total
 
 
-def dfs(ordering: dict[int: set[int]], key: int) -> set[int]:
-    afters: set = ordering[key]
+def dfs(ordering: dict[int: set[int]], key: int, update: list[int], cache: dict[(int, list[int]), set[int]] ={}) -> set[int]:
+    if (key, tuple(update)) in cache:
+        return cache[(key, tuple(update))]
+    if key not in ordering:
+        return set()
+    afters: set[int] = ordering[key]
     for k in afters:
-        afters = afters.union(dfs(ordering, k))
+        if k not in update: continue
+        afters = afters.union(dfs(ordering, k, update))
+    cache[(key, tuple(update))] = afters
     return afters
 
 
 def part2(ordering: dict[int: set[int]], updates: list[list[int]]) -> int:
     total = 0
-    
+    for update in updates:
+        lens = {k: len(dfs(ordering, k, update)) for k in update}
+        update = list(reversed(sorted(update, key=lambda x: lens[x])))
+        total += update[len(update) // 2]
+    return total
 
 
 def main():
-    with open("5/input.txt", 'r') as f:
+    with open("5. Print Queue/test.txt", 'r') as f:
         lines = f.readlines()
     
     sections = []
@@ -61,12 +71,13 @@ def main():
     sections = (parse_first(sections[0]), parse_second(sections[1]))
 
     print(part1(*sections))
-    print(len(sections[1]))
+    print(part2(*sections))
 
     # for i, part in enumerate([part1, part2]):
     #     print(f"Part {i+1}: {part(parse_first(sections[0]), parse_second(sections[1]))}")
 
-    print(dfs(sections[0], 95))
+    # for i in range(len(sections[1][3])):
+    #     print(len(dfs(sections[0], sections[1][3][i], sections[1][3])))
 
 if __name__ == "__main__":
     main()
