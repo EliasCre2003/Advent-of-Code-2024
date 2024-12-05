@@ -1,4 +1,33 @@
 
+class OrderingMap:
+
+    def __init__(self, d: dict[int, set[int]]):
+        self.vals = d
+
+    def allowed_before(self, key_val: int, val) -> bool:
+        return val not in self.vals[key_val]
+    
+    def get_all_not_allowed_before(self, key_val: int) -> set[int]:
+        return self.vals[key_val]
+    
+    def is_in(self, num: int) -> bool:
+        return num in self.vals
+
+
+class NumSequence:
+    def __init__(self, vals: list[int]):
+        self.vals = vals
+    
+    def is_ordered(self, ordering: OrderingMap) -> bool:
+        occured: set[int] = set()
+        # for num in self.vals:
+        #     if not (
+        #         occured and
+        #         ordering.is_in(num) and
+                
+        #         ):
+
+
 def parse_first(lines: list[str]) -> dict[int: set[int]]:
     ordering = {}
     for line in lines:
