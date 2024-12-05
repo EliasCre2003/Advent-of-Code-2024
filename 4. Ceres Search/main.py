@@ -81,9 +81,10 @@ def part2(field: LetterField, origin: tuple[int, int]) -> int:
     except KeyError:
         return 0
 
-    match1 = field.get_sequence(origin, patterns[0]).match(sequences[0]) #  \
-    match2 = field.get_sequence(origin, patterns[1]).match(sequences[1]) #  /
-    return match1 and match2  #   \ + / = X 
+    return 1 if sum(
+        field.get_sequence(origin, patterns[i]).match(sequences[i])
+        for i in range(2)
+    ) == 2 else 0
 
 
 def main():
