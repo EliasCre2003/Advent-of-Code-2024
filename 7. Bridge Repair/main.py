@@ -20,13 +20,13 @@ class Equation:
         return total == self.result
     
 
-def generate_possible_combinations(n: int, choises: str):
+def all_opp_combs(n: int, choises: str):
     return [list(operators) for operators in product(choises, repeat=n)]
 
 def check_all(equations: list[Equation], operators) -> int:
     total = 0
     for equation in equations:
-        for op_comb in generate_possible_combinations(len(equation.terms) - 1, operators):
+        for op_comb in all_opp_combs(len(equation.terms) - 1, operators):
             if not equation.evaluate(op_comb): continue
             total += equation.result
             break
