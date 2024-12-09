@@ -92,7 +92,7 @@ def part2(data: str):
                 combined[i], combined[j] = combined[j], combined[i]
             elif free_block > file.size:
                 combined[j] = free_block - file.size
-                
+
                 combined.pop(i)
                 combined.insert(j, file)
             else:
@@ -102,10 +102,24 @@ def part2(data: str):
     # files = [file for file in files if type(file) if File]
     return checksum(combined)
         
+def part3(data: str):
+    memory: list[int | str] = []
+    empty = False
+    id = 0
+    for file in data:
+        for _ in range(int(file)):
+            if empty: memory.append('.')
+            else: memory.append(id)
+        id += not empty
+        empty = not empty
+
+    
+    print(''.join(str(mem) if type(mem) is int else mem for mem in memory))
+
 
 def main():
     with open("9. Disk Fragmenter/test.txt", 'r') as f:
         data = f.read().strip()
-    print(part2(data))
+    print(part3(data))
 if __name__ == "__main__":
     main()
