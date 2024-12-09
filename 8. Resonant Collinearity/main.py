@@ -48,10 +48,16 @@ class CityMap:
     #     return len(antinodes)
 
 
-def antinode_coords(antenna_coords: tuple[AntennaCoordinate, AntennaCoordinate]) -> tuple[AntennaCoordinate, AntennaCoordinate]:
+def antinode_coords(antenna_coords: tuple[AntennaCoordinate, AntennaCoordinate], depth: int = 2) -> list[AntennaCoordinate, AntennaCoordinate]:
     difference = antenna_coords[1].x - antenna_coords[0].x, antenna_coords[1].y - antenna_coords[0].y
-    return (AntennaCoordinate(antenna_coords[0].x - difference[0], antenna_coords[0].y - difference[1], antenna_coords[0].frequency),
-            AntennaCoordinate(antenna_coords[1].x + difference[0], antenna_coords[1].y + difference[1], antenna_coords[1].frequency))
+    antinodes =  []
+    for i in range(1, (depth // 2) + 1):
+        antinodes.append(AntennaCoordinate(antenna_coords[0].x - i * difference[0], antenna_coords[0].y - i * difference[1], antenna_coords[0].frequency))
+        antinodes.append(AntennaCoordinate(antenna_coords[1].x + i * difference[0], antenna_coords[1].y + i * difference[1], antenna_coords[1].frequency))
+    return antinodes
+
+    # return (AntennaCoordinate(antenna_coords[0].x - difference[0], antenna_coords[0].y - difference[1], antenna_coords[0].frequency),
+    #         AntennaCoordinate(antenna_coords[1].x + difference[0], antenna_coords[1].y + difference[1], antenna_coords[1].frequency))
 
 def part1(city_map: CityMap) -> int:
     antinodes: set[tuple[int, int]] = set()
@@ -62,10 +68,22 @@ def part1(city_map: CityMap) -> int:
     return len(antinodes)
 
 def part2(city_map: CityMap) -> int:
-    ...
+    antinodes: set[tuple[int, int]] = set()
+    for pair in city_map.generate_pairs():
+        for antinode_coord in antinode_coords(pair, 100):
+            if city_map.get_at(antinode_coord.xy()) != '|':
+                antinodes.add(antinode_coord.xy())
+    for antinode in antinodes:
+        city_map.cells[antinode[1]][antinode[0]] = '#'
+    total = len(antinodes)
+    for row in city_map.cells:
+        for cell in row:
+            if cell not in ('.#'): total += 1
+    return total
+    # return len(antinodes)
 
 def main():
-    with open("8. Resonant Collinearity/test.txt", 'r') as f:
+    with open("8. Resonant Collinearity/input.txt", 'r') as f:
         lines = f.readlines()
     
     city_map = CityMap([list(line.strip()) for line in lines])
