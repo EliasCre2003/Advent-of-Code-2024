@@ -8,23 +8,10 @@ class File:
 
     def __repr__(self):
         return str(self)
-    
-def pretty_print(data):
-    empty = False
-    id = 0
-    for num in data:
-        num = int(num)
-        if empty:
-            print('.' * num, end='')
-        else:
-            print(str(id) * num, end='')
-            id += 1
-        empty = not empty
-    print()
+
 
 def checksum(files: list[File]) -> int:
-    index = 0
-    total = 0
+    index, total = 0, 0
     for file in files:
         if type(file) is not File:
             index += file
@@ -63,6 +50,7 @@ def part1(data: str):
         index += 1
     return checksum(files)
 
+
 def part2(data: str):
     files, free_space = parse_data(data)
     combined: list[File | int] = []
@@ -70,17 +58,8 @@ def part2(data: str):
         combined.append(files[i])
         try: combined.append(free_space[i])
         except IndexError: break
-
-    def pretty_print():
-        for element in combined:
-            if type(element) is File:
-                print(element, end='')
-            else:
-                print('.' * element, end='')
-        print()
     moved: set[File] = set()
     for i in range(len(combined) - 1, -1, -1):
-        pretty_print()
         if type(file := combined[i]) is not File: continue
         if file in moved: continue
         if file.id == 4:
@@ -93,33 +72,28 @@ def part2(data: str):
             elif free_block > file.size:
                 combined[j] = free_block - file.size
 
+                if type(combined[i-1]) is not File:
+                    combined[i-1] += file.size
+                    if i+1 < len(combined) and type(combined[i+1]) is not File:
+                        combined[i-1] += combined[i+1]
+                        combined.pop(i+1)                             
+                elif i+1 < len(combined) and  type(combined[i+1]) is not File:
+                    combined[i+1] += file.size
+                else:
+                    combined.insert(i+1, file.size)
+
                 combined.pop(i)
                 combined.insert(j, file)
             else:
                 continue
             moved.add(file)
             break
-    # files = [file for file in files if type(file) if File]
     return checksum(combined)
-        
-def part3(data: str):
-    memory: list[int | str] = []
-    empty = False
-    id = 0
-    for file in data:
-        for _ in range(int(file)):
-            if empty: memory.append('.')
-            else: memory.append(id)
-        id += not empty
-        empty = not empty
-
-    
-    print(''.join(str(mem) if type(mem) is int else mem for mem in memory))
-
 
 def main():
-    with open("9. Disk Fragmenter/test.txt", 'r') as f:
+    with open("9. Disk Fragmenter/input.txt", 'r') as f:
         data = f.read().strip()
-    print(part3(data))
+    for i, part in enumerate([part1, part2]):
+        print(f"Part {i+1}: {part(data)}")
 if __name__ == "__main__":
     main()
