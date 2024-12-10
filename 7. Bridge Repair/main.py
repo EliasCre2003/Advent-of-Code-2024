@@ -39,7 +39,7 @@ def part2(equations: list[Equation]):
     return check_all(equations, '+*|')
 
 def main():
-    with open("7. Bridge Repair/input.txt", 'r') as f:
+    with open("7. Bridge Repair/test.txt", 'r') as f:
         lines = f.readlines()
     equations = [Equation(int((parts := line.strip().split(': '))[0]), 
                 [int(num) for num in parts[1].split(' ')]) 
