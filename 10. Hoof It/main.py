@@ -1,3 +1,6 @@
+# class Path:
+#     def __init__(self, coords: list[int])
+
 class TopographicMap:
     def __init__(self, map: list[list[int]]):
         self.map = map
@@ -13,27 +16,43 @@ class TopographicMap:
         try: return self.map[coord[1]][coord[0]]
         except IndexError: return -1
     
-    def dfs(self, coord: tuple[int, int], reached: set[tuple[int, int]], previous: int = -1) -> int:
+    def dfs(self, 
+            coord: tuple[int, int], 
+            reached: set[tuple[int, int]], 
+            paths: set[list[tuple[int, int]]], 
+            path: list[tuple[int, int]],  
+            previous: int = -1,
+            part: int = 1) -> int:
         level = self.get_at(coord)
         if level == -1: return
         if level != previous + 1: return
         if level == 9:
             reached.add(coord)
+            paths.add(tuple(path))
             return
         for direction in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
-            self.dfs((coord[0] + direction[0], coord[1] + direction[1]), reached, level)
-        return len(reached)
-            
+            path = path.copy()
+            next_coord = (coord[0] + direction[0], coord[1] + direction[1])
+            path.append(next_coord)
+            self.dfs(next_coord, reached, paths, path, level, part)
+        if part == 1:
+            return len(reached)
+        else:
+            return len(paths)
+
 
 
 def part1(tope_map: TopographicMap) -> int:
     total = 0
     for trailhead in tope_map.trailheads:
-        total += tope_map.dfs(trailhead, set())
+        total += tope_map.dfs(trailhead, set(), set(), [], part=1)
     return total
 
 def part2(tope_map: TopographicMap) -> int:
-    ...
+    total = 0
+    for trailhead in tope_map.trailheads:
+        total += tope_map.dfs(trailhead, set(), set(), [], part=2)
+    return total
 
 
 def main():
