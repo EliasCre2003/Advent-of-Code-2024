@@ -50,7 +50,6 @@ def part1(data: str):
         index += 1
     return checksum(files)
 
-
 def part2(data: str):
     files, free_space = parse_data(data)
     combined: list[File | int] = []
@@ -62,8 +61,6 @@ def part2(data: str):
     for i in range(len(combined) - 1, -1, -1):
         if type(file := combined[i]) is not File: continue
         if file in moved: continue
-        if file.id == 4:
-            pass
         for j in range(len(combined)):
             if i == j: break
             if type(free_block := combined[j]) is File: continue
@@ -71,7 +68,6 @@ def part2(data: str):
                 combined[i], combined[j] = combined[j], combined[i]
             elif free_block > file.size:
                 combined[j] = free_block - file.size
-
                 if type(combined[i-1]) is not File:
                     combined[i-1] += file.size
                     if i+1 < len(combined) and type(combined[i+1]) is not File:
@@ -90,10 +86,12 @@ def part2(data: str):
             break
     return checksum(combined)
 
+
 def main():
     with open("9. Disk Fragmenter/input.txt", 'r') as f:
         data = f.read().strip()
     for i, part in enumerate([part1, part2]):
         print(f"Part {i+1}: {part(data)}")
+
 if __name__ == "__main__":
     main()
