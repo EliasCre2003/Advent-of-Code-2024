@@ -1,0 +1,1 @@
+C:\Users\elias\source\repos\Advent-of-Code-2024\11.\ Plutonian\ Pebbles\solution\target\debug\solution.exe: C:\Users\elias\source\repos\Advent-of-Code-2024\11.\ Plutonian\ Pebbles\solution\src\main.rs
