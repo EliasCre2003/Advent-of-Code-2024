@@ -1,15 +1,16 @@
+from math import floor, log10
 
 def split_stone(stone: int) -> list[int]:
     if stone == 0:
         return [1]
-    elif len(str_stone := str(stone)) % 2 == 0:
-        half_length = len(str_stone) // 2
+    n_digits = floor(log10(stone)) + 1
+    if n_digits % 2 == 0:
+        tens = 10 ** (n_digits // 2)
         return [
-            int(str_stone[:half_length]),
-            int(str_stone[half_length:])
-        ]
-    else:
-        return [stone * 2024]
+            stone // tens,
+            stone % tens
+        ]    
+    return [stone * 2024]
 
 
 def width_at_depth(stone: int, target_depth: int, cache: dict[tuple[int, int], int], current_depth: int = 0):
