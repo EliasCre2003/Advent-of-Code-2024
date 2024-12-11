@@ -1,4 +1,6 @@
 from math import floor, log10
+from time import time
+
 
 def split_stone(stone: int) -> list[int]:
     if stone == 0:
@@ -16,21 +18,29 @@ def split_stone(stone: int) -> list[int]:
 def width_at_depth(stone: int, target_depth: int, cache: dict[tuple[int, int], int], current_depth: int = 0):
     if target_depth == current_depth:
         return 1
-    if (stone, current_depth) in cache:
-        return cache[(stone, current_depth)]
+    key = (stone, target_depth - current_depth)
+    if key in cache:
+        return cache[key]
     result = sum(
         width_at_depth(stone, target_depth, cache, current_depth + 1) 
         for stone in split_stone(stone)
     )
-    cache[(stone, current_depth)] = result
+    cache[key] = result
     return result
 
 
 def main():
     with open('11. Plutonian Pebbles/input.txt', 'r') as f:
         stones = [int(n) for n in f.read().strip().split(' ')]
+    cache: dict[tuple[int, int], int] = {}
+    total_time = 0
     for i, depth in enumerate([25, 75]):
-        print(f"Part {i+1}: {sum(width_at_depth(stone, depth, cache={}) for stone in stones)}")
+        start = time()
+        result = sum(width_at_depth(stone, depth, cache) for stone in stones)
+        runtime = time() - start
+        total_time += runtime
+        print(f"Part {i+1}: {result}, Runtime: {round(runtime, 4)}s")
+    print(f"Total runtime: {round(total_time, 4)}")
 
 
 if __name__ == "__main__":
