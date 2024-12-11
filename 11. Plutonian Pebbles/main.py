@@ -15,7 +15,7 @@ def split_stones(stones: list[int]) -> list[int]:
 def split_stones_n_times(stones: list[int], n: int) -> list[int]:
     for _ in range(n):
         stones = split_stones(stones)
-    return len(stones)
+    return stones
 
 def part1(stones: list[int]) -> int:
     return len(split_stones_n_times(stones, 25))    
