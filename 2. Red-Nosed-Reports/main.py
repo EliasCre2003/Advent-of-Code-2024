@@ -6,8 +6,6 @@ class Report:
         decreasing = self.levels[0] >= self.levels[1]
         for i in range(len(self.levels) - 1):
             diff = self.levels[i+1] - self.levels[i]
-            # if not ((-1 < diff > -3) and decreasing or (1 <= diff <= 3)):
-            #     return False
             if (diff > -1 or diff < -3) and decreasing:
                 return False
             if (diff > 3 or diff < 1) and not decreasing:
@@ -38,7 +36,8 @@ def main():
         lines = f.readlines()
     
     reports = [Report([int(num) for num in line.strip().split()]) for line in lines]
-    print(part2(reports))
+    for i, part in enumerate([part1, part2]):
+        print(f"Part {i+1}: {part(reports)}")
 
 if __name__ == "__main__":
     main()
