@@ -24,9 +24,9 @@ class GameMap:
 
         def add_pos():
             visited_pos.add(position)
-            if self.get_at(position) in ('^', '>', 'v', '<'):
-                self.set_at(position, '+')
-            elif self.get_at(position) == '.':
+            # if self.get_at(position) in ('^', '>', 'v', '<'):
+            #     self.set_at(position, '+')
+            if self.get_at(position) == '.':
                 self.set_at(position, directions[dir_index][1])
 
 
