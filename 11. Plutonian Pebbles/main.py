@@ -17,10 +17,9 @@ def width_at_depth(stone: int, target_depth: int, cache: dict[tuple[int, int], i
         return 1
     if (stone, current_depth) in cache:
         return cache[(stone, current_depth)]
-    new_stones = split_stone(stone)
     result = sum(
         width_at_depth(stone, target_depth, cache, current_depth + 1) 
-        for stone in new_stones
+        for stone in split_stone(stone)
     )
     cache[(stone, current_depth)] = result
     return result
