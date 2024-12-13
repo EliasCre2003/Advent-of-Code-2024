@@ -6,12 +6,12 @@ class ClawMachine:
         self.b = b
         self.prize = prize
     
-    def solve(self) -> int:
+    def tokens_required(self) -> int:
         b_clicks = -((-self.a[1]*self.prize[0] + self.a[0]*self.prize[1]) / 
                      (self.a[1]*self.b[0] - self.a[0]*self.b[1]))
         a_clicks = (self.prize[0] - self.b[0] * b_clicks) / self.a[0]
-        n_clicks = a_clicks * 3 + b_clicks
-        if int(n_clicks) == n_clicks: return int(n_clicks)
+        n_tokens = a_clicks * 3 + b_clicks
+        if int(n_tokens) == n_tokens: return int(n_tokens)
         else: return 0
    
 
@@ -34,7 +34,7 @@ def main():
 
     for i, error in enumerate([0, 10000000000000]):
         machines = parse_input(lines, error)
-        result = sum(machine.solve() for machine in machines)
+        result = sum(machine.tokens_required() for machine in machines)
         print(f"Part {i+1}: {result}")
 
     
