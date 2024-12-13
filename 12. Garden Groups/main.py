@@ -68,16 +68,14 @@ class Region:
         extra_corners = set()
         for corner, occ in corners.items():
             if occ != 2: continue
-            pattern = []
-            for dir in [(0, 0), (0, -1), (-1, -1), (-1, 0)]:
+            pattern: list[int] = []
+            for dir in [(0, 0), (0, -1), (-1, -1)]:
                 coord = corner[0] + dir[0], corner[1] + dir[1]
-                if coord in self.plot_coords: 
-                    pattern.append(1)
-                else:
-                    pattern.append(0)
+                if coord in self.plot_coords: pattern.append(1)
+                else: pattern.append(0)
             if pattern in (
-                    [1, 0, 1, 0],
-                    [0, 1, 0, 1]
+                    [1, 0, 1],
+                    [0, 1, 0]
                 ):
                 extra_corners.add(coord)
         corners: list[tuple[int, int]] = [corner for corner, occ in corners.items() if occ in (1, 3)]
@@ -139,7 +137,7 @@ def part2(farm: Farm) -> int:
     )
 
 def main():
-    with open("12. Garden Groups/input.txt", 'r') as f:
+    with open("12. Garden Groups/test3.txt", 'r') as f:
         lines = f.readlines()
     farm = Farm([list(line.strip()) for line in lines])
     for i, part in enumerate([part1, part2]):
