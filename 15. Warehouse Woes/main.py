@@ -132,12 +132,10 @@ class Warehouse:
     
     
     def sum_gps_coordinates(self, tile_type: Tile) -> int:
-        total = 0
-        for y, row in enumerate(self.tiles):
-            for x, tile in enumerate(row):
-                if tile != tile_type: continue
-                total += x + 100 * y
-        return total
+        return sum(
+            sum(x + 100 * y for x, tile in enumerate(row) 
+                if tile == tile_type) 
+            for y, row in enumerate(self.tiles))
 
     def __str__(self) -> str:
         return '\n'.join(' '.join(tile.value for tile in row) for row in self.tiles)
@@ -184,15 +182,15 @@ def part2(data: str):
 
     print(warehouse)
     for direction in directions:
+        # time.sleep(0.3)
         warehouse.move_part2(direction)
-        time.sleep(0.3)
-        print(f"{"\033[F"}{"\033[A" * (len(warehouse.tiles)-1)}", end='')
-        print(warehouse)
+        # print(f"{"\033[F"}{"\033[A" * (len(warehouse.tiles)-1)}", end='')
+        # print(warehouse)
     return warehouse.sum_gps_coordinates(Tile.LEFT_BOX)
 
 
 def main():
-    with open("15. Warehouse Woes/test4.txt", 'r') as f:
+    with open("15. Warehouse Woes/input.txt", 'r') as f:
         data = f.read()
     print(part2(data))
 
