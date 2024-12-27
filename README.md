@@ -1,6 +1,6 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2024 - 36 ⭐ - Python
+  2024 - 37 ⭐ - Python
 </h1>
 <a href="1. Historian Hysteria/main.py">
   <img src=".aoc_tiles/tiles/2024/01.png" width="161px">
@@ -58,5 +58,8 @@
 </a>
 <a href="19. Linen Layout/main.py">
   <img src=".aoc_tiles/tiles/2024/19.png" width="161px">
+</a>
+<a href="20. Race Condition/main.py">
+  <img src=".aoc_tiles/tiles/2024/20.png" width="161px">
 </a>
 <!-- AOC TILES END -->
