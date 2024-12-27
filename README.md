@@ -1,6 +1,6 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2024 - 37 ⭐ - Python
+  2024 - 38 ⭐ - Python
 </h1>
 <a href="1. Historian Hysteria/main.py">
   <img src=".aoc_tiles/tiles/2024/01.png" width="161px">
