@@ -1,4 +1,5 @@
 from re import findall
+from math import prod
 
 def parse_mull(string: str) -> tuple[int, int]:
     string = string.removeprefix("mul(")
@@ -15,15 +16,13 @@ def part2(input: str) -> str:
     mull = True
     total = 0
     regex = r"mul\(\d+,\d+\)|do\(\)|don't\(\)"
-    stream = findall(regex, input)
-    for term in stream:
+    for term in findall(regex, input):
         match term:
             case "do()": mull = True
             case "don't()": mull = False
             case _:
                 if not mull: continue
-                factors = parse_mull(term)
-                total += factors[0] * factors[1]
+                total += prod(parse_mull(term))
     return total
 
 def main():
